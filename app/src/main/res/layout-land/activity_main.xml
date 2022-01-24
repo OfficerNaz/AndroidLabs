@@ -13,7 +13,7 @@
         android:id="@+id/textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="36dp"
         android:text="@string/love_android"
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,19 +22,19 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.214" />
+        app:layout_constraintVertical_bias="0.083" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="131dp"
         android:layout_height="64dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="36dp"
         android:text="@string/button"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.58" />
+        app:layout_constraintVertical_bias="0.593" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -43,10 +43,10 @@
         android:layout_marginEnd="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.804"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.236"
+        app:layout_constraintVertical_bias="0.13"
         app:srcCompat="@drawable/flag"
         tools:ignore="MissingConstraints" />
 
@@ -54,37 +54,40 @@
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
-        android:layout_marginEnd="240dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="396dp"
         android:text="Switch on/off"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText,MissingConstraints,UseSwitchCompatOrMaterialXml" />
+        tools:ignore="MissingConstraints" />
 
     <CheckBox
         android:id="@+id/check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="132dp"
         android:text="@string/check"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.405"
+        app:layout_constraintVertical_bias="0.534"
         tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/textEdit"
-        android:layout_width="380dp"
-        android:layout_height="81dp"
+        android:layout_width="586dp"
+        android:layout_height="57dp"
         android:hint="@string/love_android"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.675"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.771"
-        tools:ignore="Autofill,MissingConstraints,SpUsage" />
+        app:layout_constraintVertical_bias="0.847"
+        tools:ignore="MissingConstraints" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
