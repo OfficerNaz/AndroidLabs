@@ -1,10 +1,9 @@
 <resources>
+    <string name="enter_name">Enter your name</string>
+    <string name="next">Next</string>
+    <string name="dont_call_me_that">Don\'t call me that</string>
+    <string name="welcome">Welcome</string>
+    <string name="thank_you">Thank you</string>
     <string name="app_name">AndroidLabs</string>
-    <string name="love_android">I love Android</string>
-    <string name="button">PRESS ME</string>
-    <string name="toast_message">Label has be updated</string>
-    <string name="check">Check this out!</string>
-    <string name="onCheck">The check is  </string>
-    <string name="american_flag">American Flag</string>
-    <string name="switch_on_off">Switch on/off</string>
+
 </resources>
