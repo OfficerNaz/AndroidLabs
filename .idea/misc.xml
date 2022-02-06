@@ -3,13 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout-land/activity_main.xml" value="0.25" />
-        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main.xml" value="0.4" />
-        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main_constraint.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main_grid.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main_linear.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_name.xml" value="0.4" />
-        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/layout_2.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_todo.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/actrivity_todo.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
