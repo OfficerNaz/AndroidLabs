@@ -25,19 +25,19 @@
             android:id="@+id/Etext"
             android:layout_width="231dp"
             android:layout_height="wrap_content"
-            android:hint="Type here" />
+            android:hint="@string/typeHere" />
 
         <Switch
             android:id="@+id/urgent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Urgent"/>
+            android:text="@string/aswitch"/>
 
         <Button
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ADD"/>
+            android:text="@string/button"/>
 
     </LinearLayout>
 

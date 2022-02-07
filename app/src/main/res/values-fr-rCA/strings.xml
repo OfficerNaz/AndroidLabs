@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="enter_name">Entre votre nom</string>
-    <string name="next">Suivant</string>
-    <string name="dont_call_me_that">Ne m\'appelle pas comme ça</string>
-    <string name="welcome">Bienvenue</string>
-    <string name="thank_you">Merci</string>
     <string name="app_name">AndroidLabs</string>
+    <string name="typeHere">Ecrivez ici</string>
+    <string name="aswitch">Urgent</string>
+    <string name="button">ADD</string>
+    <string name="delete">Voulez-vous supprimer ceci?</string>
+    <string name="sure">La ligne selectionnee est:</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+
 
 </resources>

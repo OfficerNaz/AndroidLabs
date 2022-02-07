@@ -38,8 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        // setContentView loads objects onto the screen.
-        // Before this function, the screen is empty.
+        String delMessage = getString(R.string.delete);
+        String sureMessage = getString(R.string.sure);
+        String yessir = getString(R.string.yes);
+        String no = getString(R.string.no);
+
         setContentView(R.layout.activity_main);
         MainActivity.this.elements = new ArrayList<>();
         ListView myList = findViewById(R.id.lView);
@@ -53,18 +56,18 @@ public class MainActivity extends AppCompatActivity {
 
         myList.setOnItemLongClickListener((p, b, pos, id) -> {
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle("Do you want to delete this?")
+            alertDialogBuilder.setTitle(delMessage)
 
 
-                    .setMessage("Selected row is: " + pos)
+                    .setMessage(sureMessage + " " + pos)
 
 
-                    .setPositiveButton("Yes", (click, arg) -> {
+                    .setPositiveButton(yessir, (click, arg) -> {
                         elements.remove(pos);
                         myAdapter.notifyDataSetChanged();
                     })
 
-                    .setNegativeButton("No", (click, arg) -> {
+                    .setNegativeButton(no, (click, arg) -> {
                     })
 
 
