@@ -3,55 +3,57 @@ package com.example.androidlabs;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<TodoItem> elements;
+    private ArrayList<Item> elements;
     private MyListAdapter myAdapter;
     private Button button;
     private Switch aswitch;
     private EditText eText;
+    SQLiteDatabase db;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         String delMessage = getString(R.string.delete);
         String sureMessage = getString(R.string.sure);
         String yessir = getString(R.string.yes);
         String no = getString(R.string.no);
-
-        setContentView(R.layout.activity_main);
-        MainActivity.this.elements = new ArrayList<>();
-        ListView myList = findViewById(R.id.lView);
-        myAdapter = new MyListAdapter(elements);
-        myList.setAdapter(myAdapter);
         eText = findViewById(R.id.Etext);
         aswitch = findViewById(R.id.urgent);
         button = findViewById(R.id.addButton);
         initAddButton();
+
+        MainActivity.this.elements = new ArrayList<>();
+        ListView myList = findViewById(R.id.lView);
+        myAdapter = new MyListAdapter(elements);
+        myList.setAdapter(myAdapter);
+
+        loadDataFromDatabase();
+
 
 
         myList.setOnItemLongClickListener((p, b, pos, id) -> {
@@ -84,21 +86,56 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                elements.add(new TodoItem(eText.getText().toString(), aswitch.isChecked()));
+                String item = eText.getText().toString();
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(DatabaseHelper.COL_ITEMS, item );
+                contentValues.put(DatabaseHelper.COL_URG, aswitch.isChecked());
+                long id = db.insert(DatabaseHelper.TABLE_NAME, null, contentValues );
+
+
+                elements.add(new Item(item, aswitch.isChecked(), id));
                 myAdapter.notifyDataSetChanged();
                 eText.setText("");
                 aswitch.setChecked(false);
+
             }
         });
 
 
     }
 
+    private void loadDataFromDatabase()
+    {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        db = dbHelper.getWritableDatabase();
+
+        String [] columns = {DatabaseHelper.COL_ID, DatabaseHelper.COL_ITEMS, DatabaseHelper.COL_URG};
+        Cursor cursor = db.query(false, DatabaseHelper.TABLE_NAME, columns, null, null, null,
+                null,null,null);
+
+        int itemColumn = cursor.getColumnIndex(DatabaseHelper.COL_ITEMS);
+        int itemIdColumn = cursor.getColumnIndex(DatabaseHelper.COL_ID);
+        int isUrgentCol = cursor.getColumnIndex(DatabaseHelper.COL_URG);
+
+        while(cursor.moveToNext())
+        {
+            String item = cursor.getString(itemColumn);
+            long id = cursor.getLong(itemIdColumn);
+            int urgent = cursor.getInt(isUrgentCol);
+
+            elements.add(new Item(item,urgent ,id));
+
+
+
+        }
+    }
+
     private class MyListAdapter extends BaseAdapter {
 
-        private ArrayList<TodoItem> jobby;
+        private ArrayList<Item> jobby;
 
-        public MyListAdapter(ArrayList<TodoItem> jobby) {
+        public MyListAdapter(ArrayList<Item> jobby) {
             this.jobby = jobby;
 
         }
@@ -127,9 +164,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             TextView tView = newView.findViewById(R.id.textGoesHere);
-            TodoItem jon = (TodoItem) getItem(position);
+            Item jon = (Item) getItem(position);
             tView.setText((jon).getText());
-            //tView.setText(((TodoItem)getItem(position)).getText());
+            //tView.setText(((Item)getItem(position)).getText());
 
             //set what the text should be for this row:
 
@@ -145,24 +182,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public class TodoItem {
-
-        private String text;
-        private boolean isUrgent;
-
-        public TodoItem(String text, boolean isUrgent) {
-            this.text = text;
-            this.isUrgent = isUrgent;
-
-
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public boolean isUrgent() {
-            return isUrgent;
-        }
-    }
+   
 }
