@@ -1,36 +1,42 @@
 package com.example.androidlabs;
 
 
-import androidx.appcompat.app.AlertDialog;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
 
-import java.util.ArrayList;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.StrictMode;
+import android.renderscript.ScriptGroup;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Item> elements;
-    private MyListAdapter myAdapter;
-    private Button button;
-    private Switch aswitch;
-    private EditText eText;
-    SQLiteDatabase db;
-
+    private ImageView trat;
+    private ProgressBar progress;
+    private  int progressBarStatus;
+    private Handler progressBarHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,149 +44,154 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String delMessage = getString(R.string.delete);
-        String sureMessage = getString(R.string.sure);
-        String yessir = getString(R.string.yes);
-        String no = getString(R.string.no);
-        eText = findViewById(R.id.Etext);
-        aswitch = findViewById(R.id.urgent);
-        button = findViewById(R.id.addButton);
-        initAddButton();
+        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
-        MainActivity.this.elements = new ArrayList<>();
-        ListView myList = findViewById(R.id.lView);
-        myAdapter = new MyListAdapter(elements);
-        myList.setAdapter(myAdapter);
-
-        loadDataFromDatabase();
+        //StrictMode.setThreadPolicy(policy);
 
 
 
-        myList.setOnItemLongClickListener((p, b, pos, id) -> {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setTitle(delMessage)
+
+        progress = findViewById(R.id.progress);
+        trat = findViewById(R.id.imageMain);
+        //trat.setBackgroundResource(R.drawable.jojo);
+        progressBarHandler = new Handler();
+        URL url = null;
+
+    //  while(true) {
+
+        try {
+        CatImages req = new CatImages();
+        req.execute("https://cataas.com/cat?json=true");
 
 
-                    .setMessage(sureMessage + " " + pos)
+                initProgressBar();
+                Thread.sleep(4000);
+            //req = new CatImages();
+//            req.execute("https://cataas.com/cat?json=true");
+            } catch (Exception e) {
+                e.printStackTrace();
+           }
+
+       }
 
 
-                    .setPositiveButton(yessir, (click, arg) -> {
-                        elements.remove(pos);
-                        myAdapter.notifyDataSetChanged();
-                    })
+  // }
+private void initProgressBar() {
+    // progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+    progress.setProgress(0);
+    progress.setMax(100);
+    // progress.show();
+    //reset progress bar and filesize status
+    progressBarStatus = 0;
 
-                    .setNegativeButton(no, (click, arg) -> {
-                    })
-
-
-                    .setView(getLayoutInflater().inflate(R.layout.activity_todo, null))
-
-                    .create().show();
-            return true;
-        });
-    }
-
-    private void initAddButton() {
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String item = eText.getText().toString();
-
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(DatabaseHelper.COL_ITEMS, item );
-                contentValues.put(DatabaseHelper.COL_URG, aswitch.isChecked());
-                long id = db.insert(DatabaseHelper.TABLE_NAME, null, contentValues );
-
-
-                elements.add(new Item(item, aswitch.isChecked(), id));
-                myAdapter.notifyDataSetChanged();
-                eText.setText("");
-                aswitch.setChecked(false);
-
+    new Thread(new Runnable() {
+        public void run() {
+            while (progressBarStatus < 4) {
+                // performing operation
+               // progressBarStatus++;
+                progress.incrementProgressBy(1);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // Updating the progress bar
+                progressBarHandler.post(new Runnable() {
+                    public void run() {
+                        progress.setProgress(progressBarStatus);
+                    }
+                });
             }
-        });
-
-
-    }
-
-    private void loadDataFromDatabase()
-    {
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        db = dbHelper.getWritableDatabase();
-
-        String [] columns = {DatabaseHelper.COL_ID, DatabaseHelper.COL_ITEMS, DatabaseHelper.COL_URG};
-        Cursor cursor = db.query(false, DatabaseHelper.TABLE_NAME, columns, null, null, null,
-                null,null,null);
-
-        int itemColumn = cursor.getColumnIndex(DatabaseHelper.COL_ITEMS);
-        int itemIdColumn = cursor.getColumnIndex(DatabaseHelper.COL_ID);
-        int isUrgentCol = cursor.getColumnIndex(DatabaseHelper.COL_URG);
-
-        while(cursor.moveToNext())
-        {
-            String item = cursor.getString(itemColumn);
-            long id = cursor.getLong(itemIdColumn);
-            int urgent = cursor.getInt(isUrgentCol);
-
-            elements.add(new Item(item,urgent ,id));
-
-
-
+            // performing operation if file is downloaded,
+            if (progressBarStatus >= 100) {
+                // sleeping for 1 second after operation completed
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // close the progress bar dialog
+                //progress.dismiss();
+            }
         }
-    }
+    }).start();
+}
+   public class CatImages extends AsyncTask<String, Integer, String> {
 
-    private class MyListAdapter extends BaseAdapter {
+        @Override
+        protected String doInBackground(String... strings) {
+            String catURL = null;
+            try {
 
-        private ArrayList<Item> jobby;
+                //create a URL object of what server to contact:
+                URL url = new URL(strings[0]);
+                Bitmap myBitmap = null;
 
-        public MyListAdapter(ArrayList<Item> jobby) {
-            this.jobby = jobby;
+                //open the connection
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-        }
+                //wait for data:
+                BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String inputLine;
+                StringBuffer content = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+                in.close();
+                JSONObject obj = new JSONObject(content.toString());
+                catURL = "https://cataas.com" + obj.getString("url");
+                //catURL = "https://cataas.com/cat/610f082c029b39001141db53";
+                String[] split = catURL.split("/");
+                String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        "/catPics";
+                File dir = new File(file_path);
+                if(!dir.exists()){
+                    boolean r = dir.mkdirs();
+                    if(!r){
+                        Log.i("failed","I CAN SAVE YOUR FUCKING DIR!!!!!!!!!!!!");
+                    }
+                }
+                File file = new File(dir, split[split.length-1] + ".png");
+                if(!file.exists()){
+                    url=new URL(catURL);
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    InputStream inStream = urlConnection.getInputStream();
+                    myBitmap = BitmapFactory.decodeStream(inStream);
 
-        public int getCount() {
-            return jobby.size();
-        }
+                    if(!file.exists()){
+                        boolean result = file.createNewFile();
+                        if (!result){
+                            Log.i("failed","I CAN SAVE YOUR FUCKING FILE!!!!!!!!!!!!!");
+                        }
+                        FileOutputStream fOut = new FileOutputStream(file);
 
-        public Object getItem(int position) {
-            return jobby.get(position);
+                        myBitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                        fOut.flush();
+                        fOut.close();
+                    }
 
-        }
+                }
+                else{
+                    myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                }
 
-        public long getItemId(int position) {
-            return (long) position;
-        }
-
-        public View getView(int position, View old, ViewGroup parent) {
-            View newView = old;
-            LayoutInflater inflater = getLayoutInflater();
+                trat.setImageBitmap(myBitmap);
 
 
-            if (newView == null) {
-                newView = inflater.inflate(R.layout.activity_todo, parent, false);
 
+
+             // try {
+                //    Thread.sleep(4000);
+               // } catch (InterruptedException e) {
+                 //   e.printStackTrace();
+                //}
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
             }
 
-            TextView tView = newView.findViewById(R.id.textGoesHere);
-            Item jon = (Item) getItem(position);
-            tView.setText((jon).getText());
-            //tView.setText(((Item)getItem(position)).getText());
-
-            //set what the text should be for this row:
-
-            if (elements.get(position).isUrgent()) {
-                newView.setBackgroundColor(Color.RED);
-                tView.setTextColor(Color.WHITE);
-            } else {
-                newView.setBackgroundColor(Color.WHITE);
-                tView.setTextColor(Color.BLACK);
-            }
-            //return it to be put in the table
-            return newView;
+            return catURL;
         }
     }
-
-   
 }
