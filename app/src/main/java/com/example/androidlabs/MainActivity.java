@@ -1,197 +1,156 @@
 package com.example.androidlabs;
 
-
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
-import android.os.Environment;
-import android.os.Handler;
-import android.os.StrictMode;
-import android.renderscript.ScriptGroup;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView trat;
-    private ProgressBar progress;
-    private  int progressBarStatus;
-    private Handler progressBarHandler;
+    private ListView fragOneListView;
+    private List<StarWarsActorModel> actorsList = new ArrayList<>();
+    private MyAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        fragOneListView = findViewById(R.id.fragOneListView);
 
-        //StrictMode.setThreadPolicy(policy);
+        adapter = new MyAdapter();
+        fragOneListView.setAdapter(adapter);
 
+        StarWarsAsyncTask swat = new StarWarsAsyncTask();
+        swat.execute();
 
+        fragOneListView.setOnItemClickListener((adapterView, view, position, l) -> {
+            FrameLayout fragmentContainer = findViewById(R.id.fragmentContainer);
 
+            StarWarsActorModel swam = actorsList.get(position);
 
-        progress = findViewById(R.id.progress);
-        trat = findViewById(R.id.imageMain);
-        //trat.setBackgroundResource(R.drawable.jojo);
-        progressBarHandler = new Handler();
-        URL url = null;
+            Bundle b = new Bundle();
+            b.putString("NAME", swam.getName());
+            b.putString("HEIGHT", swam.getHeight());
+            b.putString("MASS", swam.getMass());
 
-    //  while(true) {
+            if (fragmentContainer == null) { // It is a phone
+                Intent intent = new Intent(this, EmptyActivity.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            } else { // It is a tablet
+                DetailsFragment detailsFragment = new DetailsFragment();
+                detailsFragment.setArguments(b);
 
-        try {
-        CatImages req = new CatImages();
-        req.execute("https://cataas.com/cat?json=true");
-
-
-                initProgressBar();
-                Thread.sleep(4000);
-            //req = new CatImages();
-//            req.execute("https://cataas.com/cat?json=true");
-            } catch (Exception e) {
-                e.printStackTrace();
-           }
-
-       }
-
-
-  // }
-private void initProgressBar() {
-    // progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-    progress.setProgress(0);
-    progress.setMax(100);
-    // progress.show();
-    //reset progress bar and filesize status
-    progressBarStatus = 0;
-
-    new Thread(new Runnable() {
-        public void run() {
-            while (progressBarStatus < 4) {
-                // performing operation
-               // progressBarStatus++;
-                progress.incrementProgressBy(1);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                // Updating the progress bar
-                progressBarHandler.post(new Runnable() {
-                    public void run() {
-                        progress.setProgress(progressBarStatus);
-                    }
-                });
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragmentContainer, detailsFragment)
+                        .commit();
             }
-            // performing operation if file is downloaded,
-            if (progressBarStatus >= 100) {
-                // sleeping for 1 second after operation completed
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                // close the progress bar dialog
-                //progress.dismiss();
-            }
-        }
-    }).start();
-}
-   public class CatImages extends AsyncTask<String, Integer, String> {
+        });
+    }
+
+    private class StarWarsAsyncTask extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
-            String catURL = null;
+
             try {
+                URL url = new URL("https://swapi.dev/api/people/?format=json");
 
-                //create a URL object of what server to contact:
-                URL url = new URL(strings[0]);
-                Bitmap myBitmap = null;
-
-                //open the connection
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
                 //wait for data:
-                BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                String inputLine;
-                StringBuffer content = new StringBuffer();
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
-                }
-                in.close();
-                JSONObject obj = new JSONObject(content.toString());
-                catURL = "https://cataas.com" + obj.getString("url");
-                //catURL = "https://cataas.com/cat/610f082c029b39001141db53";
-                String[] split = catURL.split("/");
-                String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                        "/catPics";
-                File dir = new File(file_path);
-                if(!dir.exists()){
-                    boolean r = dir.mkdirs();
-                    if(!r){
-                        Log.i("failed","I CAN SAVE YOUR FUCKING DIR!!!!!!!!!!!!");
-                    }
-                }
-                File file = new File(dir, split[split.length-1] + ".png");
-                if(!file.exists()){
-                    url=new URL(catURL);
-                    urlConnection = (HttpURLConnection) url.openConnection();
-                    InputStream inStream = urlConnection.getInputStream();
-                    myBitmap = BitmapFactory.decodeStream(inStream);
+                InputStream response = urlConnection.getInputStream();
 
-                    if(!file.exists()){
-                        boolean result = file.createNewFile();
-                        if (!result){
-                            Log.i("failed","I CAN SAVE YOUR FUCKING FILE!!!!!!!!!!!!!");
-                        }
-                        FileOutputStream fOut = new FileOutputStream(file);
 
-                        myBitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
-                        fOut.flush();
-                        fOut.close();
-                    }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
+                StringBuilder sb = new StringBuilder();
 
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line + "\n");
                 }
-                else{
-                    myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                String result = sb.toString();
+
+                JSONObject jsonObject = new JSONObject(result);
+
+                JSONArray jsonArrayResults = jsonObject.getJSONArray("results");
+
+                for (int i = 0; i < jsonArrayResults.length(); i++) {
+                    JSONObject jsonObjectResult = jsonArrayResults.getJSONObject(i);
+
+                    String name = jsonObjectResult.getString("name");
+                    String mass = jsonObjectResult.getString("mass");
+                    String height = jsonObjectResult.getString("height");
+
+                    StarWarsActorModel swam = new StarWarsActorModel(name, height, mass);
+                    actorsList.add(swam);
                 }
 
-                trat.setImageBitmap(myBitmap);
-
-
-
-
-             // try {
-                //    Thread.sleep(4000);
-               // } catch (InterruptedException e) {
-                 //   e.printStackTrace();
-                //}
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            return catURL;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private class MyAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return actorsList.size();
+        }
+
+        @Override
+        public StarWarsActorModel getItem(int position) {
+            return actorsList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup viewGroup) {
+
+            View v = getLayoutInflater().inflate(R.layout.row_actor, viewGroup, false);
+
+            TextView name = v.findViewById(R.id.actorName);
+
+            StarWarsActorModel swam = getItem(position);
+
+            name.setText(swam.getName());
+
+            return v;
         }
     }
 }
