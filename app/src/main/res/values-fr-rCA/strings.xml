@@ -8,6 +8,16 @@
     <string name="sure">La ligne selectionnee est:</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
+    <string name="open">Ouver</string>
+    <string name="close">Fermer</string>
+    <string name="dad_joke_text">What do you call a cow with no legs? Ground beef!</string>
+    <string name="clicked_1">Yous avez clicker sure activity numero 1</string>
+    <string name="clicked_2">Yous avez clicker sure activity numero 2</string>
+    <string name="item_1">Object 1</string>
+    <string name="item_2">Object 2</string>
+    <string name="home">Maison</string>
+    <string name="exit">Sorty</string>
+    <string name="dad_joke">Balgue De Papa</string>
 
 
 </resources>

@@ -3,17 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Josep/.gradle/caches/transforms-3/9339927e08badd09bc5459e4ba900d5f/transformed/core-1.7.0/res/menu/example_menu.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/drawable/ic_launcher_background.xml" value="0.153125" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout-sw720dp/activity_main.xml" value="0.190625" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout-sw720dp/activity_todo.xml" value="0.190625" />
+        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_dad_joke.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_empty_avtivity.xml" value="0.2421875" />
-        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_main_constraint.xml" value="0.21516754850088182" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/activity_todo.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/actrivity_todo.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/fragment_details.xml" value="0.37604166666666666" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/fragment_first.xml" value="0.37604166666666666" />
+        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/header_layout.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/layout/row_actor.xml" value="0.176" />
+        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/menu/my_menu.xml" value="0.23697916666666666" />
+        <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/menu/my_menu_nav_drawer.xml" value="0.2296875" />
         <entry key="..\:/Users/Josep/AndroidStudioProjects/AndroidLabs/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.153125" />
       </map>
     </option>
